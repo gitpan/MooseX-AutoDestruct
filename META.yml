@@ -1,0 +1,44 @@
+---
+abstract: 'Clear your attributes after a certain time'
+author:
+  - 'Chris Weyl <cweyl@alumni.drew.edu>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  Test::Moose: 0
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 0.91'
+license: lgpl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: MooseX-AutoDestruct
+no_index:
+  directory:
+    - inc
+    - t
+    - xt
+  package:
+    - Moose::Meta::Attribute::Custom::Trait::AutoDestruct
+provides:
+  Moose::Meta::Attribute::Custom::Trait::AutoDestruct:
+    file: lib/MooseX/AutoDestruct.pm
+  MooseX::AutoDestruct:
+    file: lib/MooseX/AutoDestruct.pm
+    version: 0.001_02
+  MooseX::AutoDestruct::Trait::Attribute:
+    file: lib/MooseX/AutoDestruct.pm
+    version: 0.001_02
+  MooseX::AutoDestruct::Trait::Method::Accessor:
+    file: lib/MooseX/AutoDestruct.pm
+    version: 0.001_02
+requires:
+  Moose: 0.94
+  namespace::autoclean: 0.09
+resources:
+  homepage: http://github.com/RsrchBoy/moosex-autodestruct/tree
+  license: http://opensource.org/licenses/lgpl-license.php
+  repository: git://github.com/RsrchBoy/moosex-autodestruct.git
+version: 0.001_02
