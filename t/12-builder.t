@@ -5,6 +5,9 @@
 This test exercises some basic attribute functionality, to make sure things
 are working "as advertized" with the AutoDestruct trait.
 
+This is probably redundant against the main Moose test suite, but it doesn't
+hurt to check it a little bit here as well.
+
 =cut
 
 use strict;
@@ -24,7 +27,10 @@ use Test::Moose;
         traits => ['AutoDestruct'],
         #is => 'rw', lazy_build => 1, ttl => 10,
         is => 'rw', predicate => 'has_two', ttl => 5,
+        lazy => 1, builder => '_build_two',
     );
+
+    sub _build_two { 'foo' }
 }
 
 my $tc = TestClass->new;
@@ -36,14 +42,15 @@ has_attribute_ok $tc, 'one';
 has_attribute_ok $tc, 'two';
 
 # basic autodestruct checking
-ok !$tc->has_two, 'no value for two yet';
-$tc->two('w00t');
-ok $tc->has_two, 'two has value';
-is $tc->two, 'w00t', 'two value set correctly';
-diag 'sleeping';
-sleep 8;
-ok !$tc->has_two, 'no value for two (autodestruct)';
+for my $i (1..2) {
 
+    ok !$tc->has_two, 'no value for two yet';
+    is $tc->two, 'foo', 'two value set correctly';
+    ok $tc->has_two, 'two has value';
+    diag 'sleeping';
+    sleep 8;
+    ok !$tc->has_two, 'no value for two (autodestruct)';
+}
 
 done_testing;
 
