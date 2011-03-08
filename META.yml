@@ -28,13 +28,26 @@ provides:
     file: lib/MooseX/AutoDestruct.pm
   MooseX::AutoDestruct:
     file: lib/MooseX/AutoDestruct.pm
-    version: 0.004
+    version: 0.005
   MooseX::AutoDestruct::Trait::Attribute:
     file: lib/MooseX/AutoDestruct.pm
-    version: 0.004
   MooseX::AutoDestruct::Trait::Method::Accessor:
     file: lib/MooseX/AutoDestruct.pm
-    version: 0.004
+  MooseX::AutoDestruct::V1Traits:
+    file: lib/MooseX/AutoDestruct/V1Traits.pm
+    version: 0.005
+  MooseX::AutoDestruct::V1Traits::Attribute:
+    file: lib/MooseX/AutoDestruct/V1Traits.pm
+    version: 0.005
+  MooseX::AutoDestruct::V1Traits::Method::Accessor:
+    file: lib/MooseX/AutoDestruct/V1Traits.pm
+    version: 0.005
+  MooseX::AutoDestruct::V2Traits::Attribute:
+    file: lib/MooseX/AutoDestruct.pm
+    version: 0.005
+  MooseX::AutoDestruct::V2Traits::Method::Accessor:
+    file: lib/MooseX/AutoDestruct.pm
+    version: 0.005
 requires:
   Moose: 0.94
   namespace::autoclean: 0.09
@@ -42,4 +55,4 @@ resources:
   homepage: http://github.com/RsrchBoy/moosex-autodestruct/tree
   license: http://opensource.org/licenses/lgpl-license.php
   repository: git://github.com/RsrchBoy/moosex-autodestruct.git
-version: 0.004
+version: 0.005

@@ -1,4 +1,4 @@
-package MooseX::AutoDestruct;
+package MooseX::AutoDestruct::V1Traits;
 
 use warnings;
 use strict;
@@ -12,82 +12,17 @@ our $VERSION = '0.005';
 
 =head1 NAME
 
-MooseX::AutoDestruct - Clear your attributes after a certain time
-
-=head1 SYNOPSIS
-
-    package Foo;
-
-    use Moose;
-    use namespace::autoclean;
-    use MooseX::AutoDestruct;
-
-    has foo => (
-        traits => ['AutoDestruct'],
-        is => 'ro', isa => 'Str', lazy_build => 1,
-        ttl => 600, # time, in seconds
-    );
-
-    sub _build_foo { --some expensive operation-- }
+MooseX::AutoDestruct::V1Traits - Moose 1.x autodestruct traits
 
 =head1 DESCRIPTION
 
-MooseX::AutoDestruct is an attribute metaclass trait that causes your
-attribute value to be cleared after a certain time from when the value has
-been set.
-
-This trait will work regardless of how the value is populated or if a clearer
-method has been installed; or if the value is accessed via the installed
-accessors or by accessing the attribute metaclass itself.
-
-=head1 TRAITS APPLIED
-
-No traits are automatically applied to any metaclasses; however, on use'ing
-this package an 'AutoDestruct' attribute trait becomes available.
-
-=head1 USAGE
-
-Apply the AutoDestruct trait to your attribute metaclass (e.g. "traits =>
-['AutoDestruct']") and supply a ttl value.
-
-Typical usage of this could be for an attribute to store a value that is
-expensive to calculate, and can be counted on to be valid for a certain amount
-of time (e.g. caching).  Builders are your friends :)
+This package provides the traits needed for MooseX::AutoDestruct to work
+with Moose v1.  Nothing to see here, no user-serviceable parts inside.
 
 =cut
 
 {
-    package Moose::Meta::Attribute::Custom::Trait::AutoDestruct;
-
-    require Moose;
-
-    my $moose_version = Moose->VERSION;
-    my $implementation
-        = $moose_version < 1.99
-        ? 'MooseX::AutoDestruct::V1Traits::Attribute'
-        : 'MooseX::AutoDestruct::V2Traits::Attribute'
-        ;
-    require MooseX::AutoDestruct::V1Traits if $moose_version < 1.99;
-
-    ($moose_version > 2.99) && warn
-        "This is Moose $moose_version, but I only know how to deal with 2.x at most!\n",
-        "We're going to try using the v2 AutoDestruct traits, but YMMV.\n",
-        ;
-
-    sub register_implementation { $implementation }
-}
-{
-    package MooseX::AutoDestruct::Trait::Attribute;
-    use Moose::Role;
-    use namespace::autoclean;
-}
-{
-    package MooseX::AutoDestruct::Trait::Method::Accessor;
-    use Moose::Role;
-    use namespace::autoclean;
-}
-{
-    package MooseX::AutoDestruct::V2Traits::Attribute;
+    package MooseX::AutoDestruct::V1Traits::Attribute;
     use Moose::Role;
     use namespace::autoclean;
     with 'MooseX::AutoDestruct::Trait::Attribute';
@@ -111,7 +46,7 @@ of time (e.g. caching).  Builders are your friends :)
         ### superclasses: $base_class->meta->name
         my $new_class_meta = Moose::Meta::Class->create_anon_class(
             superclasses => [ $base_class->meta->name ],
-            roles => [ 'MooseX::AutoDestruct::Trait::Method::Accessor' ],
+            roles => [ 'MooseX::AutoDestruct::V1Traits::Method::Accessor' ],
             cache => 1,
         );
 
@@ -186,7 +121,7 @@ of time (e.g. caching).  Builders are your friends :)
             ->associated_class
             ->get_meta_instance
             ->deinitialize_slot($instance, $self->destruct_at_slot)
-            ;
+        ;
 
         return;
     }
@@ -213,130 +148,143 @@ of time (e.g. caching).  Builders are your friends :)
         $self->set_doomsday unless $self->has_doomsday($instance);
     };
 
-    around _inline_clear_value => sub {
-        my ($orig, $self) = (shift, shift);
-        my ($instance) = @_;
-
-        my $mi = $self->associated_class->get_meta_instance;
-
-        return $self->$orig(@_)
-            . $mi->inline_deinitialize_slot($instance, $self->destruct_at_slot)
-            . ';'
-            ;
-    };
-
-    sub _inline_destruct {
-        my $self = shift;
-        my ($instance) = @_;
-
-        my $slot_exists = $self->_inline_instance_has(@_);
-        my $destruct_at_slot_value = $self
-            ->associated_class
-            ->get_meta_instance
-            ->inline_get_slot_value('$_[0]', $self->destruct_at_slot)
-            ;
-
-        my $clear_attribute;
-        if ($self->has_clearer) {
-
-            # if we have a clearer method, we should call that -- it may have
-            # been wrapped in the class
-
-            my $clearer = $self->clearer;
-            ($clearer) = keys %$clearer if ref $clearer;
-
-            $clear_attribute = '$_[0]->' . $clearer . '()';
-        }
-        else {
-            # otherwise, just deinit all the slots we use
-            $clear_attribute = $self->_inline_clear_value(@_);
-        }
-
-        return " if ($slot_exists && time() > $destruct_at_slot_value) { $clear_attribute } ";
-    }
-
-    my $destruct_wrapper = sub {
-        my $self = shift;
-        return ($self->_inline_destruct(@_), super);
-    };
-
-    override _inline_has_value => $destruct_wrapper;
-    override _inline_get_value => $destruct_wrapper;
-
-    sub _inline_set_doomsday {
-        my ($self, $instance) = @_;
-        my $mi = $self->associated_class->get_meta_instance;
-
-        my $code = $mi->inline_set_slot_value(
-            $instance,
-            $self->destruct_at_slot,
-            'time() + ' . $self->ttl,
-        );
-
-        return "$code;\n";
-    }
-
-    override _inline_instance_set => sub {
-        my $self = shift;
-        return 'do { ' . $self->_inline_set_doomsday(@_) . ';' . super . ' }';
-    };
 }
 {
-    package MooseX::AutoDestruct::V2Traits::Method::Accessor;
+    package MooseX::AutoDestruct::V1Traits::Method::Accessor;
     use Moose::Role;
     use namespace::autoclean;
     with 'MooseX::AutoDestruct::Trait::Method::Accessor';
 
     our $VERSION = '0.005';
+
+    # debug!
+    #before _eval_closure => sub { print "$_[2]\n" };
+
+    override _inline_pre_body => sub {
+        my ($self, $instance) = @_;
+        my $attr          = $self->associated_attribute;
+        my $attr_name     = $attr->name;
+        my $mi            = $attr->associated_class->instance_metaclass;
+
+        my $code = super();
+        my $type = $self->accessor_type;
+
+        return $code
+            unless $type eq 'accessor' || $type eq 'reader' || $type eq 'predicate';
+
+        my $slot_exists = $self->_inline_has('$_[0]');
+
+        $code .= "\n    if ($slot_exists && time() > "
+            . $mi->inline_get_slot_value('$_[0]', $attr->destruct_at_slot)
+            . ") {\n"
+            ;
+
+        if ($attr->has_clearer) {
+
+            # if we have a clearer method, we should call that -- it may have
+            # been wrapped in the class
+
+            my $clearer = $attr->clearer;
+            ($clearer) = keys %$clearer if ref $clearer;
+
+            $code .= '$_[0]->' . $clearer . '()';
+
+        }
+        else {
+
+            # otherwise, just deinit all the slots we use
+            $code .= '    ' .$mi->inline_deinitialize_slot('$_[0]', $_) . ";\n"
+                for $attr->slots;
+        }
+
+        $code .= "}\n";
+
+        return $code;
+    };
+
+    override _generate_predicate_method_inline => sub {
+        my $self          = shift;
+        my $attr          = $self->associated_attribute;
+        my $attr_name     = $attr->name;
+        my $meta_instance = $attr->associated_class->instance_metaclass;
+
+        my ( $code, $e ) = $self->_eval_closure(
+            {},
+           'sub {'
+           . $self->_inline_pre_body(@_)
+           . $meta_instance->inline_is_slot_initialized('$_[0]', $attr->value_slot)
+           . $self->_inline_post_body(@_)
+           . '}'
+        );
+        confess "Could not generate inline predicate because : $e" if $e;
+
+        return $code;
+    };
+
+    override _generate_clearer_method_inline => sub {
+        my $self      = shift;
+        my $attr      = $self->associated_attribute;
+        my $attr_name = $attr->name;
+        my $mi        = $attr->associated_class->instance_metaclass;
+
+        my $deinit;
+        $deinit .= $mi->inline_deinitialize_slot('$_[0]', $_) . ';'
+            for $attr->slots;
+
+        my ( $code, $e ) = $self->_eval_closure(
+            {},
+           'sub {'
+           . $self->_inline_pre_body(@_)
+           . $deinit
+           . $self->_inline_post_body(@_)
+           . '}'
+        );
+        confess "Could not generate inline clearer because : $e" if $e;
+
+        return $code;
+    };
+
+    # we need to override/wrap _inline_store() so we can deal with there being
+    # two valid slots here that mean two different things: the value and when
+    # it autodestructs.
+
+    override _inline_store => sub {
+        my ($self, $instance, $value) = @_;
+        my $attr = $self->associated_attribute;
+        my $mi   = $attr->associated_class->get_meta_instance;
+
+        my $code = $mi->inline_set_slot_value($instance, $attr->value_slot, $value);
+        $code   .= ";\n    ";
+        $code   .= $self->_inline_set_doomsday($instance);
+        $code   .= $mi->inline_weaken_slot_value($instance, $attr->value_slot, $value)
+            if $attr->is_weak_ref;
+
+        return $code;
+    };
+
+    sub _inline_set_doomsday {
+        my ($self, $instance) = @_;
+        my $attr = $self->associated_attribute;
+        my $mi   = $attr->associated_class->get_meta_instance;
+
+        my $code = $mi->inline_set_slot_value(
+            $instance,
+            $attr->destruct_at_slot,
+            'time() + ' . $attr->ttl,
+        );
+
+        return "$code;\n";
+    }
+
 }
 
 =head1 SEE ALSO
 
-L<Class::MOP>, L<Moose>.
+L<MooseX:AutoDestruct>, L<Moose>.
 
 =head1 AUTHOR
 
 Chris Weyl, C<< <cweyl at alumni.drew.edu> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-moosex-autodestruct at rt.cpan.org>, or through
-the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=MooseX-AutoDestruct>.
-
-=head1 TODO
-
-Additional testing is required!
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc MooseX::AutoDestruct
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=MooseX-AutoDestruct>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/MooseX-AutoDestruct>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/MooseX-AutoDestruct>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/MooseX-AutoDestruct/>
-
-=back
 
 =head1 COPYRIGHT & LICENSE
 
@@ -362,4 +310,4 @@ along with this library; if not, write to the
 
 =cut
 
-1; # End of MooseX::AutoDestruct
+1;
