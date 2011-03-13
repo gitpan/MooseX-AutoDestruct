@@ -1,4 +1,12 @@
 
+BEGIN {
+  unless ($ENV{RELEASE_TESTING}) {
+    require Test::More;
+    Test::More::plan(skip_all => 'these tests are for release candidate testing');
+  }
+}
+
+
 =head1 DESCRIPTION
 
 This test ensures we don't release any Smart::Comments out there.
@@ -22,7 +30,7 @@ use Test::More;
 my @files = File::Find::Rule
     ->file
     ->name('*.pm')
-    ->in("$FindBin::Bin/../../lib")
+    ->in("$FindBin::Bin/../lib")
     ;
 
 plan tests => scalar @files;
@@ -65,6 +73,3 @@ License along with this library; if not, write to the
     Boston, MA  02111-1307  USA
 
 =cut
-
-
-

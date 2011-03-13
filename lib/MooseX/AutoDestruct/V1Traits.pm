@@ -1,4 +1,12 @@
 package MooseX::AutoDestruct::V1Traits;
+BEGIN {
+  $MooseX::AutoDestruct::V1Traits::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::V1Traits::VERSION = '0.007';
+}
+
+# ABSTRACT: Moose 1.x autodestruct traits
 
 use warnings;
 use strict;
@@ -8,26 +16,22 @@ use namespace::autoclean;
 # debugging
 #use Smart::Comments '###', '####';
 
-our $VERSION = '0.006';
+# make sure MooseX::AutoDestruct is loaded for the traits it contains,
+# otherwise our test blow up rather nastily
+Class::MOP::load_class('MooseX::AutoDestruct');
 
-=head1 NAME
-
-MooseX::AutoDestruct::V1Traits - Moose 1.x autodestruct traits
-
-=head1 DESCRIPTION
-
-This package provides the traits needed for MooseX::AutoDestruct to work
-with Moose v1.  Nothing to see here, no user-serviceable parts inside.
-
-=cut
 
 {
     package MooseX::AutoDestruct::V1Traits::Attribute;
+BEGIN {
+  $MooseX::AutoDestruct::V1Traits::Attribute::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::V1Traits::Attribute::VERSION = '0.007';
+}
     use Moose::Role;
     use namespace::autoclean;
     with 'MooseX::AutoDestruct::Trait::Attribute';
-
-    our $VERSION = '0.006';
 
     has ttl => (is => 'ro', isa => 'Int', required => 1, predicate => 'has_ttl');
 
@@ -151,11 +155,15 @@ with Moose v1.  Nothing to see here, no user-serviceable parts inside.
 }
 {
     package MooseX::AutoDestruct::V1Traits::Method::Accessor;
+BEGIN {
+  $MooseX::AutoDestruct::V1Traits::Method::Accessor::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::V1Traits::Method::Accessor::VERSION = '0.007';
+}
     use Moose::Role;
     use namespace::autoclean;
     with 'MooseX::AutoDestruct::Trait::Method::Accessor';
-
-    our $VERSION = '0.006';
 
     # debug!
     #before _eval_closure => sub { print "$_[2]\n" };
@@ -278,6 +286,25 @@ with Moose v1.  Nothing to see here, no user-serviceable parts inside.
 
 }
 
+
+1;
+
+__END__
+=pod
+
+=head1 NAME
+
+MooseX::AutoDestruct::V1Traits - Moose 1.x autodestruct traits
+
+=head1 VERSION
+
+version 0.007
+
+=head1 DESCRIPTION
+
+This package provides the traits needed for MooseX::AutoDestruct to work
+with Moose v1.  Nothing to see here, no user-serviceable parts inside.
+
 =head1 SEE ALSO
 
 L<MooseX:AutoDestruct>, L<Moose>.
@@ -286,28 +313,17 @@ L<MooseX:AutoDestruct>, L<Moose>.
 
 Chris Weyl, C<< <cweyl at alumni.drew.edu> >>
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright (c) 2011, Chris Weyl C<< <cweyl@alumni.drew.edu> >>.
+Chris Weyl <cweyl@alumni.drew.edu>
 
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 2.1 of the License, or (at your option)
-any later version.
+=head1 COPYRIGHT AND LICENSE
 
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-OR A PARTICULAR PURPOSE.
+This software is Copyright (c) 2011 by Chris Weyl.
 
-See the GNU Lesser General Public License for more details.
+This is free software, licensed under:
 
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the
-
-    Free Software Foundation, Inc.,
-    59 Temple Place, Suite 330,
-    Boston, MA  02111-1307 USA
+  The GNU Lesser General Public License, Version 2.1, February 1999
 
 =cut
 
-1;

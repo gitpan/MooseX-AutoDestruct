@@ -1,4 +1,12 @@
 package MooseX::AutoDestruct;
+BEGIN {
+  $MooseX::AutoDestruct::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::VERSION = '0.007';
+}
+
+# ABSTRACT: Clear your attributes after a certain time
 
 use warnings;
 use strict;
@@ -8,58 +16,16 @@ use namespace::autoclean;
 # debugging
 #use Smart::Comments '###', '####';
 
-our $VERSION = '0.006';
-
-=head1 NAME
-
-MooseX::AutoDestruct - Clear your attributes after a certain time
-
-=head1 SYNOPSIS
-
-    package Foo;
-
-    use Moose;
-    use namespace::autoclean;
-    use MooseX::AutoDestruct;
-
-    has foo => (
-        traits => ['AutoDestruct'],
-        is => 'ro', isa => 'Str', lazy_build => 1,
-        ttl => 600, # time, in seconds
-    );
-
-    sub _build_foo { --some expensive operation-- }
-
-=head1 DESCRIPTION
-
-MooseX::AutoDestruct is an attribute metaclass trait that causes your
-attribute value to be cleared after a certain time from when the value has
-been set.
-
-This trait will work regardless of how the value is populated or if a clearer
-method has been installed; or if the value is accessed via the installed
-accessors or by accessing the attribute metaclass itself.
-
-=head1 TRAITS APPLIED
-
-No traits are automatically applied to any metaclasses; however, on use'ing
-this package an 'AutoDestruct' attribute trait becomes available.
-
-=head1 USAGE
-
-Apply the AutoDestruct trait to your attribute metaclass (e.g. "traits =>
-['AutoDestruct']") and supply a ttl value.
-
-Typical usage of this could be for an attribute to store a value that is
-expensive to calculate, and can be counted on to be valid for a certain amount
-of time (e.g. caching).  Builders are your friends :)
-
-=cut
 
 {
     package Moose::Meta::Attribute::Custom::Trait::AutoDestruct;
+BEGIN {
+  $Moose::Meta::Attribute::Custom::Trait::AutoDestruct::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $Moose::Meta::Attribute::Custom::Trait::AutoDestruct::VERSION = '0.007';
+}
 
-    our $VERSION = '0.006';
 
     require Moose;
 
@@ -80,23 +46,38 @@ of time (e.g. caching).  Builders are your friends :)
 }
 {
     package MooseX::AutoDestruct::Trait::Attribute;
+BEGIN {
+  $MooseX::AutoDestruct::Trait::Attribute::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::Trait::Attribute::VERSION = '0.007';
+}
     use Moose::Role;
     use namespace::autoclean;
-    our $VERSION = '0.006';
 }
 {
     package MooseX::AutoDestruct::Trait::Method::Accessor;
+BEGIN {
+  $MooseX::AutoDestruct::Trait::Method::Accessor::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::Trait::Method::Accessor::VERSION = '0.007';
+}
     use Moose::Role;
     use namespace::autoclean;
-    our $VERSION = '0.006';
 }
 {
     package MooseX::AutoDestruct::V2Traits::Attribute;
+BEGIN {
+  $MooseX::AutoDestruct::V2Traits::Attribute::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::V2Traits::Attribute::VERSION = '0.007';
+}
     use Moose::Role;
     use namespace::autoclean;
     with 'MooseX::AutoDestruct::Trait::Attribute';
 
-    our $VERSION = '0.006';
 
     has ttl => (is => 'ro', isa => 'Int', required => 1, predicate => 'has_ttl');
 
@@ -287,12 +268,71 @@ of time (e.g. caching).  Builders are your friends :)
 }
 {
     package MooseX::AutoDestruct::V2Traits::Method::Accessor;
+BEGIN {
+  $MooseX::AutoDestruct::V2Traits::Method::Accessor::AUTHORITY = 'cpan:RSRCHBOY';
+}
+BEGIN {
+  $MooseX::AutoDestruct::V2Traits::Method::Accessor::VERSION = '0.007';
+}
     use Moose::Role;
     use namespace::autoclean;
     with 'MooseX::AutoDestruct::Trait::Method::Accessor';
 
-    our $VERSION = '0.006';
 }
+
+
+1; # End of MooseX::AutoDestruct
+
+__END__
+=pod
+
+=head1 NAME
+
+MooseX::AutoDestruct - Clear your attributes after a certain time
+
+=head1 VERSION
+
+version 0.007
+
+=head1 SYNOPSIS
+
+    package Foo;
+
+    use Moose;
+    use namespace::autoclean;
+    use MooseX::AutoDestruct;
+
+    has foo => (
+        traits => ['AutoDestruct'],
+        is => 'ro', isa => 'Str', lazy_build => 1,
+        ttl => 600, # time, in seconds
+    );
+
+    sub _build_foo { --some expensive operation-- }
+
+=head1 DESCRIPTION
+
+MooseX::AutoDestruct is an attribute metaclass trait that causes your
+attribute value to be cleared after a certain time from when the value has
+been set.
+
+This trait will work regardless of how the value is populated or if a clearer
+method has been installed; or if the value is accessed via the installed
+accessors or by accessing the attribute metaclass itself.
+
+=head1 TRAITS APPLIED
+
+No traits are automatically applied to any metaclasses; however, on use'ing
+this package an 'AutoDestruct' attribute trait becomes available.
+
+=head1 USAGE
+
+Apply the AutoDestruct trait to your attribute metaclass (e.g. "traits =>
+['AutoDestruct']") and supply a ttl value.
+
+Typical usage of this could be for an attribute to store a value that is
+expensive to calculate, and can be counted on to be valid for a certain amount
+of time (e.g. caching).  Builders are your friends :)
 
 =head1 SEE ALSO
 
@@ -319,7 +359,6 @@ You can find documentation for this module with the perldoc command.
 
     perldoc MooseX::AutoDestruct
 
-
 You can also look for information at:
 
 =over 4
@@ -342,28 +381,17 @@ L<http://search.cpan.org/dist/MooseX-AutoDestruct/>
 
 =back
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright (c) 2011, Chris Weyl C<< <cweyl@alumni.drew.edu> >>.
+Chris Weyl <cweyl@alumni.drew.edu>
 
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 2.1 of the License, or (at your option)
-any later version.
+=head1 COPYRIGHT AND LICENSE
 
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-OR A PARTICULAR PURPOSE.
+This software is Copyright (c) 2011 by Chris Weyl.
 
-See the GNU Lesser General Public License for more details.
+This is free software, licensed under:
 
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the
-
-    Free Software Foundation, Inc.,
-    59 Temple Place, Suite 330,
-    Boston, MA  02111-1307 USA
+  The GNU Lesser General Public License, Version 2.1, February 1999
 
 =cut
 
-1; # End of MooseX::AutoDestruct

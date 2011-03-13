@@ -1,35 +1,65 @@
 
-sub githubmeta  { warn 'You need Module::Install::GithubMeta installed' }
-sub extra_tests { warn 'You need Module::Install::ExtraTests installed' }
+use strict;
+use warnings;
 
-use inc::Module::Install;
+BEGIN { require 5.006; }
 
-githubmeta;
+use ExtUtils::MakeMaker 6.31;
 
-name     'MooseX-AutoDestruct';
-all_from 'lib/MooseX/AutoDestruct.pm';
-author   q{Chris Weyl <cweyl@alumni.drew.edu>};
-license  'lgpl';
 
-readme_from 'lib/MooseX/AutoDestruct.pm';
-readme_markdown_from 'lib/MooseX/AutoDestruct.pm';
 
-requires 'namespace::autoclean' => '0.09';
-requires 'Moose' => '0.94';
+my %WriteMakefileArgs = (
+  'ABSTRACT' => 'Clear your attributes after a certain time',
+  'AUTHOR' => 'Chris Weyl <cweyl@alumni.drew.edu>',
+  'BUILD_REQUIRES' => {
+    'Carp' => '0',
+    'English' => '0',
+    'File::Find' => '0',
+    'File::Find::Rule' => '0',
+    'File::Temp' => '0',
+    'FindBin' => '0',
+    'Module::ScanDeps' => '0',
+    'Scalar::Util' => '0',
+    'Test::Moose' => '0',
+    'Test::More' => '0.94',
+    'perl' => '5.004'
+  },
+  'CONFIGURE_REQUIRES' => {
+    'ExtUtils::MakeMaker' => '6.31'
+  },
+  'DISTNAME' => 'MooseX-AutoDestruct',
+  'EXE_FILES' => [],
+  'LICENSE' => 'lgpl',
+  'NAME' => 'MooseX::AutoDestruct',
+  'PREREQ_PM' => {
+    'Moose' => '0',
+    'Moose::Role' => '0',
+    'namespace::autoclean' => '0'
+  },
+  'VERSION' => '0.007',
+  'test' => {
+    'TESTS' => 't/*.t'
+  }
+);
 
-test_requires 'Test::More';
-test_requires 'Test::Moose';
 
-author_requires 'File::Find::Rule';
-author_requires 'FindBin';
-author_requires 'Module::ScanDeps';
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
+}
 
-no_index package => 'Moose::Meta::Attribute::Custom::Trait::AutoDestruct';
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
-extra_tests;
-auto_install;
-auto_provides;
-write_mymeta_json;
+WriteMakefile(%WriteMakefileArgs);
 
-WriteAll;
+
 
