@@ -1,9 +1,15 @@
+#
+# This file is part of MooseX-AutoDestruct
+#
+# This software is Copyright (c) 2011 by Chris Weyl.
+#
+# This is free software, licensed under:
+#
+#   The GNU Lesser General Public License, Version 2.1, February 1999
+#
 package MooseX::AutoDestruct;
-BEGIN {
-  $MooseX::AutoDestruct::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::VERSION = '0.008';
 }
 
 # ABSTRACT: Clear your attributes after a certain time
@@ -19,11 +25,8 @@ use namespace::autoclean;
 
 {
     package Moose::Meta::Attribute::Custom::Trait::AutoDestruct;
-BEGIN {
-  $Moose::Meta::Attribute::Custom::Trait::AutoDestruct::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $Moose::Meta::Attribute::Custom::Trait::AutoDestruct::VERSION = '0.007';
+{
+  $Moose::Meta::Attribute::Custom::Trait::AutoDestruct::VERSION = '0.008';
 }
 
 
@@ -46,33 +49,24 @@ BEGIN {
 }
 {
     package MooseX::AutoDestruct::Trait::Attribute;
-BEGIN {
-  $MooseX::AutoDestruct::Trait::Attribute::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::Trait::Attribute::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::Trait::Attribute::VERSION = '0.008';
 }
     use Moose::Role;
     use namespace::autoclean;
 }
 {
     package MooseX::AutoDestruct::Trait::Method::Accessor;
-BEGIN {
-  $MooseX::AutoDestruct::Trait::Method::Accessor::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::Trait::Method::Accessor::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::Trait::Method::Accessor::VERSION = '0.008';
 }
     use Moose::Role;
     use namespace::autoclean;
 }
 {
     package MooseX::AutoDestruct::V2Traits::Attribute;
-BEGIN {
-  $MooseX::AutoDestruct::V2Traits::Attribute::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::V2Traits::Attribute::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::V2Traits::Attribute::VERSION = '0.008';
 }
     use Moose::Role;
     use namespace::autoclean;
@@ -114,7 +108,6 @@ BEGIN {
     around slots => sub {
         my ($orig, $self) = (shift, shift);
 
-        my $base = $self->$orig();
         return ($self->$orig(), $self->destruct_at_slot);
     };
 
@@ -218,7 +211,7 @@ BEGIN {
         my $destruct_at_slot_value = $self
             ->associated_class
             ->get_meta_instance
-            ->inline_get_slot_value('$_[0]', $self->destruct_at_slot)
+            ->inline_get_slot_value($instance, $self->destruct_at_slot)
             ;
 
         my $clear_attribute;
@@ -230,7 +223,7 @@ BEGIN {
             my $clearer = $self->clearer;
             ($clearer) = keys %$clearer if ref $clearer;
 
-            $clear_attribute = '$_[0]->' . $clearer . '()';
+            $clear_attribute = "${instance}->" . $clearer . '()';
         }
         else {
             # otherwise, just deinit all the slots we use
@@ -268,11 +261,8 @@ BEGIN {
 }
 {
     package MooseX::AutoDestruct::V2Traits::Method::Accessor;
-BEGIN {
-  $MooseX::AutoDestruct::V2Traits::Method::Accessor::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::V2Traits::Method::Accessor::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::V2Traits::Method::Accessor::VERSION = '0.008';
 }
     use Moose::Role;
     use namespace::autoclean;
@@ -292,7 +282,7 @@ MooseX::AutoDestruct - Clear your attributes after a certain time
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
 
@@ -348,38 +338,6 @@ Please report any bugs or feature requests to
 C<bug-moosex-autodestruct at rt.cpan.org>, or through
 the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=MooseX-AutoDestruct>.
-
-=head1 TODO
-
-Additional testing is required!
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc MooseX::AutoDestruct
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=MooseX-AutoDestruct>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/MooseX-AutoDestruct>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/MooseX-AutoDestruct>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/MooseX-AutoDestruct/>
-
-=back
 
 =head1 AUTHOR
 

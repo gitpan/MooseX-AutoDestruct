@@ -23,8 +23,8 @@ t/author-pod.t
 t/release-consistent-version.t
 t/release-eol.t
 t/release-has-version.t
+t/release-no-smart-comments.t
 t/release-no-tabs.t
-t/release-no_smart_comments.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/release-portability.t

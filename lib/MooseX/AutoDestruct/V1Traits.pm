@@ -1,9 +1,15 @@
+#
+# This file is part of MooseX-AutoDestruct
+#
+# This software is Copyright (c) 2011 by Chris Weyl.
+#
+# This is free software, licensed under:
+#
+#   The GNU Lesser General Public License, Version 2.1, February 1999
+#
 package MooseX::AutoDestruct::V1Traits;
-BEGIN {
-  $MooseX::AutoDestruct::V1Traits::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::V1Traits::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::V1Traits::VERSION = '0.008';
 }
 
 # ABSTRACT: Moose 1.x autodestruct traits
@@ -23,11 +29,8 @@ Class::MOP::load_class('MooseX::AutoDestruct');
 
 {
     package MooseX::AutoDestruct::V1Traits::Attribute;
-BEGIN {
-  $MooseX::AutoDestruct::V1Traits::Attribute::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::V1Traits::Attribute::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::V1Traits::Attribute::VERSION = '0.008';
 }
     use Moose::Role;
     use namespace::autoclean;
@@ -155,11 +158,8 @@ BEGIN {
 }
 {
     package MooseX::AutoDestruct::V1Traits::Method::Accessor;
-BEGIN {
-  $MooseX::AutoDestruct::V1Traits::Method::Accessor::AUTHORITY = 'cpan:RSRCHBOY';
-}
-BEGIN {
-  $MooseX::AutoDestruct::V1Traits::Method::Accessor::VERSION = '0.007';
+{
+  $MooseX::AutoDestruct::V1Traits::Method::Accessor::VERSION = '0.008';
 }
     use Moose::Role;
     use namespace::autoclean;
@@ -298,7 +298,7 @@ MooseX::AutoDestruct::V1Traits - Moose 1.x autodestruct traits
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 

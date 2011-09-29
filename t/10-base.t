@@ -1,4 +1,13 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+#
+# This file is part of MooseX-AutoDestruct
+#
+# This software is Copyright (c) 2011 by Chris Weyl.
+#
+# This is free software, licensed under:
+#
+#   The GNU Lesser General Public License, Version 2.1, February 1999
+#
 
 =head1 DESCRIPTION
 
@@ -22,64 +31,36 @@ use Test::Moose;
 
     has two => (
         traits => ['AutoDestruct'],
-        #is => 'rw', lazy_build => 1, ttl => 10,
         is => 'rw', predicate => 'has_two', ttl => 5, clearer => 'clear_two',
     );
 }
 
-my $tc = TestClass->new;
+with_immutable {
 
-isa_ok $tc, 'TestClass';
-meta_ok $tc;
+    my $tc = TestClass->new;
 
-has_attribute_ok $tc, 'one';
-has_attribute_ok $tc, 'two';
+    isa_ok $tc, 'TestClass';
+    meta_ok $tc;
 
-# basic autodestruct checking
-ok !$tc->has_two, 'no value for two yet';
-$tc->two('w00t');
-ok $tc->has_two, 'two has value';
-is $tc->two, 'w00t', 'two value set correctly';
-diag 'sleeping';
-sleep 8;
-ok !$tc->has_two, 'no value for two (autodestruct)';
+    has_attribute_ok $tc, 'one';
+    has_attribute_ok $tc, 'two';
 
-# check our generated clearer
-$tc->two('w00t');
-ok $tc->has_two, 'two has value';
-is $tc->two, 'w00t', 'two value set correctly';
-$tc->clear_two;
-ok !$tc->has_two, 'no value for two (clearer method)';
+    # basic autodestruct checking
+    ok !$tc->has_two, 'no value for two yet';
+    $tc->two('w00t');
+    ok $tc->has_two, 'two has value';
+    is $tc->two, 'w00t', 'two value set correctly';
+    diag 'sleeping';
+    sleep 8;
+    ok !$tc->has_two, 'no value for two (autodestruct)';
+
+    # check our generated clearer
+    $tc->two('w00t');
+    ok $tc->has_two, 'two has value';
+    is $tc->two, 'w00t', 'two value set correctly';
+    $tc->clear_two;
+    ok !$tc->has_two, 'no value for two (clearer method)';
+
+} 'TestClass';
 
 done_testing;
-
-__END__
-
-=head1 AUTHOR
-
-Chris Weyl  <cweyl@alumni.drew.edu>
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2010 Chris Weyl <cweyl@alumni.drew.edu>
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the
-
-     Free Software Foundation, Inc.
-     59 Temple Place, Suite 330
-     Boston, MA  02111-1307  USA
-
-=cut
-
-

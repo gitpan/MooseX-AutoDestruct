@@ -2,7 +2,7 @@ NAME
     MooseX::AutoDestruct - Clear your attributes after a certain time
 
 VERSION
-    version 0.007
+    version 0.008
 
 SYNOPSIS
         package Foo;
@@ -51,32 +51,6 @@ BUGS
     Please report any bugs or feature requests to "bug-moosex-autodestruct
     at rt.cpan.org", or through the web interface at
     <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=MooseX-AutoDestruct>.
-
-TODO
-    Additional testing is required!
-
-SUPPORT
-    You can find documentation for this module with the perldoc command.
-
-        perldoc MooseX::AutoDestruct
-
-    You can also look for information at:
-
-    *   RT: CPAN's request tracker
-
-        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=MooseX-AutoDestruct>
-
-    *   AnnoCPAN: Annotated CPAN documentation
-
-        <http://annocpan.org/dist/MooseX-AutoDestruct>
-
-    *   CPAN Ratings
-
-        <http://cpanratings.perl.org/d/MooseX-AutoDestruct>
-
-    *   Search CPAN
-
-        <http://search.cpan.org/dist/MooseX-AutoDestruct/>
 
 AUTHOR
     Chris Weyl <cweyl@alumni.drew.edu>

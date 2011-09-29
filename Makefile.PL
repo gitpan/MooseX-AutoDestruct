@@ -2,43 +2,42 @@
 use strict;
 use warnings;
 
-BEGIN { require 5.006; }
+use 5.006;
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Clear your attributes after a certain time',
-  'AUTHOR' => 'Chris Weyl <cweyl@alumni.drew.edu>',
-  'BUILD_REQUIRES' => {
-    'Carp' => '0',
-    'English' => '0',
-    'File::Find' => '0',
-    'File::Find::Rule' => '0',
-    'File::Temp' => '0',
-    'FindBin' => '0',
-    'Module::ScanDeps' => '0',
-    'Scalar::Util' => '0',
-    'Test::Moose' => '0',
-    'Test::More' => '0.94',
-    'perl' => '5.004'
+  "ABSTRACT" => "Clear your attributes after a certain time",
+  "AUTHOR" => "Chris Weyl <cweyl\@alumni.drew.edu>",
+  "BUILD_REQUIRES" => {
+    "Carp" => 0,
+    "File::Find" => 0,
+    "File::Temp" => 0,
+    "Scalar::Util" => 0,
+    "Test::Moose" => 0,
+    "Test::More" => "0.94",
+    "Test::UseAllModules" => 0,
+    "perl" => "5.004"
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'MooseX-AutoDestruct',
-  'EXE_FILES' => [],
-  'LICENSE' => 'lgpl',
-  'NAME' => 'MooseX::AutoDestruct',
-  'PREREQ_PM' => {
-    'Moose' => '0',
-    'Moose::Role' => '0',
-    'namespace::autoclean' => '0'
+  "DISTNAME" => "MooseX-AutoDestruct",
+  "EXE_FILES" => [],
+  "LICENSE" => "lgpl",
+  "NAME" => "MooseX::AutoDestruct",
+  "PREREQ_PM" => {
+    "Moose" => 0,
+    "Moose::Role" => 0,
+    "namespace::autoclean" => 0,
+    "strict" => 0,
+    "warnings" => 0
   },
-  'VERSION' => '0.007',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.008",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 
