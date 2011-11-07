@@ -12,14 +12,10 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "Clear your attributes after a certain time",
   "AUTHOR" => "Chris Weyl <cweyl\@alumni.drew.edu>",
   "BUILD_REQUIRES" => {
-    "Carp" => 0,
     "File::Find" => 0,
     "File::Temp" => 0,
-    "Scalar::Util" => 0,
     "Test::Moose" => 0,
-    "Test::More" => "0.94",
-    "Test::UseAllModules" => 0,
-    "perl" => "5.004"
+    "Test::More" => "0.88"
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -30,12 +26,13 @@ my %WriteMakefileArgs = (
   "NAME" => "MooseX::AutoDestruct",
   "PREREQ_PM" => {
     "Moose" => 0,
+    "Moose::Exporter" => 0,
     "Moose::Role" => 0,
     "namespace::autoclean" => 0,
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.008",
+  "VERSION" => "0.009",
   "test" => {
     "TESTS" => "t/*.t"
   }
